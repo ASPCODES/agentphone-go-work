@@ -12,3 +12,12 @@ import(
 func (c *Client) setAuthHeader(req *http.Request) {
 	req.Header.Set("Authorization", "Bearer "+c.apiKey)
 }
+
+
+// setHeaders applies every header every outgoing request needs: the auth header, plus X-Sub-Account-Id when the client was scoped to a sub-account via WithSubAccount. 
+func (c *Client) setHeaders(req *http.Request) {
+	c.setAuthHeader(req)
+	if c.subAccountID != "" {
+		req.Header.Set("X-Sub-Account-Id", c.subAccountID)
+	}
+}
