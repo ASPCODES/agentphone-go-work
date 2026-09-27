@@ -18,10 +18,10 @@ const (
 
 // Client is the AgentPhone API client. Create one with NewClient.
 type Client struct {
-	apiKey     string
-	baseURL    string
-	httpClient *http.Client
-
+	apiKey     	  string
+	baseURL    	  string
+	httpClient 	  *http.Client
+	subAccountID  string
 	Agents        *AgentsService
 	Numbers       *NumbersService
 	Calls         *CallsService
