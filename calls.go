@@ -99,14 +99,12 @@ func (s *CallsService) List(ctx context.Context, params *ListCallsParams) (*List
 
 // CreateOutboundCallParams are the parameters for placing an outbound call. AgentID and ToNumber are required.
 type CreateOutboundCallParams struct {
-	AgentID  string `json:"agentId"`
-	ToNumber string `json:"toNumber"` // E.164, e.g. "+15559876543"
-
-
+	AgentID  		string `json:"agentId"`
+	ToNumber 		string `json:"toNumber"` // E.164, e.g. "+15559876543"
 	InitialGreeting string `json:"initialGreeting,omitempty"`
-	Voice string `json:"voice,omitempty"`
-	SystemPrompt string `json:"systemPrompt,omitempty"`
-	FromNumberID string `json:"fromNumberId,omitempty"`
+	Voice 			string `json:"voice,omitempty"`
+	SystemPrompt 	string `json:"systemPrompt,omitempty"`
+	FromNumberID 	string `json:"fromNumberId,omitempty"`
 }
 
 
@@ -117,8 +115,7 @@ func (s *CallsService) Create(ctx context.Context, params *CreateOutboundCallPar
 	return &call, err
 }
 
-// CreateWebCallParams are the parameters for minting a web-call access
-// token. AgentID is required.
+// CreateWebCallParams are the parameters for minting a web-call access token. AgentID is required.
 type CreateWebCallParams struct {
 	AgentID string `json:"agentId"`
 	// Variables are template variables for hosted-mode agents, referenced
@@ -128,16 +125,11 @@ type CreateWebCallParams struct {
 
 // CreateWebCallResponse is the response from CreateWeb.
 type CreateWebCallResponse struct {
-	// AccessToken is valid for only 30 seconds — pass it to the frontend
-	// immediately, which uses the agentphone-web-sdk npm package to start
-	// the call with it.
 	AccessToken string `json:"accessToken"`
 	CallID      string `json:"callId"`
 }
 
-// CreateWeb mints a short-lived access token for a browser-based call via
-// the agentphone-web-sdk. Your backend calls this, then hands the token to
-// the frontend. The resulting call's Direction is "web".
+// CreateWeb mints a short-lived access token for a browser-based call via the agentphone-web-sdk. Your backend calls this, then hands the token to the frontend. The resulting call's Direction is "web".
 func (s *CallsService) CreateWeb(ctx context.Context, params *CreateWebCallParams) (*CreateWebCallResponse, error) {
 	var resp CreateWebCallResponse
 	err := s.client.request(ctx, http.MethodPost, "/calls/web", params, &resp)
@@ -152,11 +144,6 @@ func (s *CallsService) Get(ctx context.Context, callID string) (*Call, error) {
 }
 
 // End ends an in-progress call.
-//
-// NOTE: this endpoint is listed in the API reference but wasn't detailed
-// in the guide docs — no request/response example was available. This
-// assumes it takes no body and returns the updated Call; verify against a
-// live API key.
 func (s *CallsService) End(ctx context.Context, callID string) (*Call, error) {
 	var call Call
 	err := s.client.request(ctx, http.MethodPost, "/calls/"+callID+"/end", nil, &call)
