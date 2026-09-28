@@ -17,29 +17,27 @@ type CallsService struct {
 	client *Client
 }
 
-
 // Call represents a voice call (inbound, outbound, or web).
 type Call struct {
-	ID              string `json:"id"`
-	AgentID         string `json:"agentId"`
-	PhoneNumberID   string `json:"phoneNumberId"`
-	PhoneNumber     string `json:"phoneNumber"`
-	FromNumber      string `json:"fromNumber"`
-	ToNumber        string `json:"toNumber"`
-	Direction       string `json:"direction"`
-	Status          string `json:"status"`    
-	StartedAt       string `json:"startedAt"`
-	EndedAt         string `json:"endedAt,omitempty"`
-	DurationSeconds int    `json:"durationSeconds,omitempty"`
+	ID                    string `json:"id"`
+	AgentID               string `json:"agentId"`
+	PhoneNumberID         string `json:"phoneNumberId"`
+	PhoneNumber           string `json:"phoneNumber"`
+	FromNumber            string `json:"fromNumber"`
+	ToNumber              string `json:"toNumber"`
+	Direction             string `json:"direction"`
+	Status                string `json:"status"`
+	StartedAt             string `json:"startedAt"`
+	EndedAt               string `json:"endedAt,omitempty"`
+	DurationSeconds       int    `json:"durationSeconds,omitempty"`
 	LastTranscriptSnippet string `json:"lastTranscriptSnippet,omitempty"`
 
 	// RecordingURL and RecordingAvailable are only meaningful when the
 	// call-recording add-on is enabled.
-	RecordingURL       string `json:"recordingUrl,omitempty"`
-	RecordingAvailable bool   `json:"recordingAvailable,omitempty"`
-	Transcripts []Transcript `json:"transcripts,omitempty"`
+	RecordingURL       string       `json:"recordingUrl,omitempty"`
+	RecordingAvailable bool         `json:"recordingAvailable,omitempty"`
+	Transcripts        []Transcript `json:"transcripts,omitempty"`
 }
-
 
 type Transcript struct {
 	ID         string  `json:"id"`
@@ -57,11 +55,11 @@ type ListCallsResponse struct {
 
 // ListCallsParams filters and paginates List. All fields are optional.
 type ListCallsParams struct {
-	Limit  int
-	Offset int
-	Status string
+	Limit     int
+	Offset    int
+	Status    string
 	Direction string
-	Search string
+	Search    string
 }
 
 func (p *ListCallsParams) toQuery() string {
@@ -99,14 +97,13 @@ func (s *CallsService) List(ctx context.Context, params *ListCallsParams) (*List
 
 // CreateOutboundCallParams are the parameters for placing an outbound call. AgentID and ToNumber are required.
 type CreateOutboundCallParams struct {
-	AgentID  		string `json:"agentId"`
-	ToNumber 		string `json:"toNumber"` // E.164, e.g. "+15559876543"
+	AgentID         string `json:"agentId"`
+	ToNumber        string `json:"toNumber"` // E.164, e.g. "+15559876543"
 	InitialGreeting string `json:"initialGreeting,omitempty"`
-	Voice 			string `json:"voice,omitempty"`
-	SystemPrompt 	string `json:"systemPrompt,omitempty"`
-	FromNumberID 	string `json:"fromNumberId,omitempty"`
+	Voice           string `json:"voice,omitempty"`
+	SystemPrompt    string `json:"systemPrompt,omitempty"`
+	FromNumberID    string `json:"fromNumberId,omitempty"`
 }
-
 
 // Create places an outbound voice call.
 func (s *CallsService) Create(ctx context.Context, params *CreateOutboundCallParams) (*Call, error) {
@@ -150,13 +147,11 @@ func (s *CallsService) End(ctx context.Context, callID string) (*Call, error) {
 	return &call, err
 }
 
-
 // CallRecording is the response from GetRecording.
 type CallRecording struct {
 	RecordingURL       string `json:"recordingUrl"`
 	RecordingAvailable bool   `json:"recordingAvailable"`
 }
-
 
 // GetRecording retrieves recording info for a call.
 func (s *CallsService) GetRecording(ctx context.Context, callID string) (*CallRecording, error) {
@@ -165,12 +160,10 @@ func (s *CallsService) GetRecording(ctx context.Context, callID string) (*CallRe
 	return &rec, err
 }
 
-
 // ListTranscriptsResponse is the response from GetTranscript.
 type ListTranscriptsResponse struct {
 	Transcripts []Transcript `json:"transcripts"`
 }
-
 
 // GetTranscript retrieves just a call's transcript turns, without the rest of the call's fields.
 func (s *CallsService) GetTranscript(ctx context.Context, callID string) (*ListTranscriptsResponse, error) {
@@ -178,7 +171,6 @@ func (s *CallsService) GetTranscript(ctx context.Context, callID string) (*ListT
 	err := s.client.request(ctx, http.MethodGet, "/calls/"+callID+"/transcript", nil, &resp)
 	return &resp, err
 }
-
 
 // ListForNumber returns the calls associated with a specific phone number (GET /v1/numbers/{number_id}/calls).
 func (s *CallsService) ListForNumber(ctx context.Context, numberID string, params *ListCallsParams) (*ListCallsResponse, error) {
@@ -208,14 +200,12 @@ type TranscriptConnectedEvent struct {
 	StartedAt  string `json:"startedAt"`
 }
 
-
 // TranscriptTurnEvent is one transcript turn, replayed from history or arriving live.
 type TranscriptTurnEvent struct {
 	Role      string `json:"role"` // "user" | "agent"
 	Content   string `json:"content"`
 	CreatedAt string `json:"createdAt"`
 }
-
 
 // TranscriptEndedEvent is sent once the call has ended; the stream closes immediately after.
 type TranscriptEndedEvent struct {
@@ -225,11 +215,10 @@ type TranscriptEndedEvent struct {
 	DurationSeconds int    `json:"durationSeconds"`
 }
 
-
 // TranscriptStreamHandler is called once, synchronously, for each event as it arrives (in order). Return a non-nil error to stop the stream early, that error is then returned from StreamTranscript.
 type TranscriptStreamHandler func(event TranscriptEvent) error
 
-// StreamTranscript streams a call's transcript in real time via Server-Sent Events. On connect, the server replays every existing turn, then for a live call, keeps streaming new turns until the call ends;for an already-completed call, it sends the "ended" event immediately after replaying history and the stream closes. 
+// StreamTranscript streams a call's transcript in real time via Server-Sent Events. On connect, the server replays every existing turn, then for a live call, keeps streaming new turns until the call ends;for an already-completed call, it sends the "ended" event immediately after replaying history and the stream closes.
 func (s *CallsService) StreamTranscript(ctx context.Context, callID string, handler TranscriptStreamHandler) error {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, s.client.baseURL+"/calls/"+callID+"/transcript/stream", nil)
 	if err != nil {
@@ -250,6 +239,7 @@ func (s *CallsService) StreamTranscript(ctx context.Context, callID string, hand
 	}
 
 	scanner := bufio.NewScanner(resp.Body)
+	scanner.Buffer(make([]byte, 0, 64*1024), 1024*1024)
 	var eventType string
 
 	for scanner.Scan() {
