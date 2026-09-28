@@ -1,10 +1,10 @@
 # AgentPhone Go SDK
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/YOUR_USERNAME/agentphone-go.svg)](https://pkg.go.dev/github.com/YOUR_USERNAME/agentphone-go)
-[![Go Report Card](https://goreportcard.com/badge/github.com/YOUR_USERNAME/agentphone-go)](https://goreportcard.com/report/github.com/YOUR_USERNAME/agentphone-go)
+[![Go Reference](https://pkg.go.dev/badge/github.com/AgentPhone-AI/agentphone-go.svg)](https://pkg.go.dev/github.com/AgentPhone-AI/agentphone-go)
+[![Go Report Card](https://goreportcard.com/badge/github.com/AgentPhone-AI/agentphone-go)](https://goreportcard.com/report/github.com/AgentPhone-AI/agentphone-go)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-> **Unofficial community SDK.** This is not maintained by the AgentPhone team — built to bring Go support to the [AgentPhone](https://agentphone.ai) ecosystem alongside the official Python and TypeScript/JavaScript SDKs.
+> **Official AgentPhone Go SDK.** Maintained by the AgentPhone team for building integrations with the [AgentPhone](https://agentphone.ai) platform.
 
 Give your AI agents real phone numbers, SMS, and voice calls — from Go.
 
@@ -13,7 +13,7 @@ AgentPhone provides a REST API for provisioning phone numbers, managing AI agent
 ## Installation
 
 ```bash
-go get github.com/YOUR_USERNAME/agentphone-go
+go get github.com/AgentPhone-AI/agentphone-go
 ```
 
 Requires Go 1.21 or later.
@@ -29,7 +29,7 @@ import (
 	"log"
 	"os"
 
-	agentphone "github.com/YOUR_USERNAME/agentphone-go"
+	agentphone "github.com/AgentPhone-AI/agentphone-go"
 )
 
 func main() {
@@ -60,33 +60,25 @@ Get your API key from [agentphone.to](https://agentphone.to) under **Settings �
 
 ## Available Resources
 
-| Resource | Description |
-|---|---|
-| `Agents` | Create and manage AI phone agents, voices, and agent webhooks |
-| `Numbers` | Buy, list, and manage phone numbers |
-| `Calls` | Place outbound calls, fetch recordings and transcripts |
-| `Messages` | Send SMS/iMessage and reactions |
-| `Conversations` | Manage threaded SMS conversations |
-| `Contacts` | Create and manage contacts |
-| `Contact Cards` | Manage per-number contact card info |
-| `Webhooks` | Configure inbound event webhooks and view delivery logs |
-| `Verification` | Send and check verification codes |
-| `Usage` | Query usage stats by account, number, or agent |
-| `Sub-Accounts` | Manage sub-accounts |
-| `SIP Trunks` | Configure SIP trunk connections |
-| `WhatsApp` | Connect and manage WhatsApp numbers and templates |
-| `Registration` | Manage A2P 10DLC registration |
-| `Location` | Look up and refresh number location data |
+| Resource        | Description                                                   |
+| --------------- | ------------------------------------------------------------- |
+| `Agents`        | Create and manage AI phone agents, voices, and agent webhooks |
+| `Numbers`       | Buy, list, and manage phone numbers                           |
+| `Calls`         | Place outbound calls, fetch recordings and transcripts        |
+| `Messages`      | Send SMS/iMessage and reactions                               |
+| `Conversations` | Manage threaded SMS conversations                             |
+| `Contacts`      | Create and manage contacts                                    |
+| `Contact Cards` | Manage per-number contact card info                           |
+| `Webhooks`      | Configure inbound event webhooks and view delivery logs       |
+| `Verification`  | Send and check verification codes                             |
+| `Usage`         | Query usage stats by account, number, or agent                |
+| `Sub-Accounts`  | Manage sub-accounts                                           |
+| `SIP Trunks`    | Configure SIP trunk connections                               |
+| `WhatsApp`      | Connect and manage WhatsApp numbers and templates             |
+| `Registration`  | Manage A2P 10DLC registration                                 |
+| `Location`      | Look up and refresh number location data                      |
 
 Full endpoint-level reference: [docs.agentphone.ai/api-reference](https://docs.agentphone.ai/api-reference)
-
-## Examples
-
-More complete, runnable examples live in [`examples/`](./examples):
-
-- [`examples/send_sms`](./examples/send_sms) — send a text message
-- [`examples/make_call`](./examples/make_call) — place an outbound AI voice call
-- [`examples/create_agent`](./examples/create_agent) — create a new AI phone agent
 
 ## Error Handling
 
